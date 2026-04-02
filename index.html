@@ -2,94 +2,119 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BotMaster AI | Конструктор</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .anim-fade { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
-<body class="bg-gray-50 min-h-screen font-sans">
-    <header class="bg-indigo-600 text-white p-4 shadow-md flex justify-between items-center">
-        <h1 class="text-xl font-bold">BotMaster AI</h1>
-        <div id="status" class="text-xs bg-indigo-500 px-3 py-1 rounded-full">Готов к работе</div>
+<body class="bg-gray-50 min-h-screen">
+
+    <header class="sticky top-0 z-40 bg-white border-b p-4 flex justify-between items-center shadow-sm">
+        <h1 class="text-xl font-extrabold text-indigo-700 tracking-tight">BotMaster AI</h1>
+        <div id="statusIndicator" class="text-[10px] bg-amber-50 text-amber-600 px-2 py-1 rounded-full font-bold uppercase">Ожидание</div>
     </header>
 
-    <main class="p-4 max-w-2xl mx-auto space-y-6 pb-24">
-        <div class="bg-white p-5 rounded-2xl shadow-sm border">
-            <label class="block text-sm font-bold text-gray-700 mb-2">1. API Токен из @BotFather</label>
-            <input type="text" id="botToken" placeholder="123456789:ABC..." class="w-full p-3 bg-gray-50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-400">
-        </div>
+    <main class="p-4 space-y-6 pb-32">
+        
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 anim-fade">
+            <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <span>🔑</span> API Токен
+            </h3>
+            <input type="text" id="botToken" placeholder="123456789:ABC..." class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+        </section>
 
-        <div class="bg-white p-5 rounded-2xl shadow-sm border">
-            <label class="block text-sm font-bold text-gray-700 mb-2">2. Текст приветствия (/start)</label>
-            <textarea id="welcomeMsg" rows="3" class="w-full p-3 bg-gray-50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-400">Привет! Я твой новый бот.</textarea>
-        </div>
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 anim-fade" style="animation-delay: 0.1s;">
+            <h3 class="font-bold text-gray-800 mb-3">💬 Сообщение при старте</h3>
+            <textarea id="welcomeMsg" rows="3" placeholder="Привет! Я твой новый бот." class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
+        </section>
 
-        <div class="bg-white p-5 rounded-2xl shadow-sm border">
-            <label class="block text-sm font-bold text-gray-700 mb-2">3. Кнопки меню</label>
-            <div id="buttonsContainer" class="space-y-3"></div>
-            <button onclick="addButton()" class="w-full mt-3 py-3 border-2 border-dashed border-indigo-200 text-indigo-600 rounded-xl font-bold hover:bg-indigo-50">+ Добавить кнопку</button>
-        </div>
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 anim-fade" style="animation-delay: 0.2s;">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-gray-800">🔘 Кнопки меню</h3>
+            </div>
+            <div id="buttonsContainer" class="space-y-3">
+                </div>
+            <button onclick="addButton()" class="mt-4 w-full py-3 border-2 border-dashed border-indigo-100 text-indigo-600 rounded-xl font-bold text-sm hover:bg-indigo-50 transition">
+                + Добавить кнопку
+            </button>
+        </section>
 
-        <button onclick="deployBot()" id="deployBtn" class="fixed bottom-6 left-4 right-4 bg-indigo-600 text-white py-4 rounded-2xl font-bold shadow-xl active:scale-95 transition">
+    </main>
+
+    <div class="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-md border-t border-gray-100 z-50">
+        <button onclick="deployBot()" id="deployBtn" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg active:scale-95 transition disabled:bg-gray-400">
             🚀 ЗАПУСТИТЬ БОТА
         </button>
-    </main>
+    </div>
 
     <script>
         let btnCount = 0;
 
         function addButton() {
+            if (btnCount >= 6) return alert("Максимум 6 кнопок");
             btnCount++;
             const container = document.getElementById('buttonsContainer');
             const div = document.createElement('div');
-            div.className = "flex gap-2 p-2 bg-gray-50 rounded-lg border";
+            div.className = "flex gap-2 anim-fade";
+            div.id = `btn-group-${btnCount}`;
             div.innerHTML = `
-                <input type="text" placeholder="Имя кнопки" class="w-1/2 p-2 border rounded btn-name">
-                <input type="text" placeholder="Ответ бота" class="w-1/2 p-2 border rounded btn-reply">
+                <input type="text" placeholder="Имя" class="w-1/2 p-3 border rounded-xl bg-gray-50 text-sm btn-name">
+                <input type="text" placeholder="Ответ" class="w-1/2 p-3 border rounded-xl bg-gray-50 text-sm btn-reply">
+                <button onclick="this.parentElement.remove()" class="text-red-400 px-2">×</button>
             `;
             container.appendChild(div);
         }
 
         async function deployBot() {
-            const btn = document.getElementById('deployBtn');
-            const token = document.getElementById('botToken').value;
-            
-            if(!token) return alert("Введите токен!");
+            const deployBtn = document.getElementById('deployBtn');
+            const status = document.getElementById('statusIndicator');
+            const token = document.getElementById('botToken').value.trim();
+            const welcome = document.getElementById('welcomeMsg').value.trim();
 
-            btn.innerText = "ЗАПУСКАЮ...";
-            btn.disabled = true;
+            if (!token) return alert("Пожалуйста, введите токен!");
+
+            // Блокируем кнопку на время запроса
+            deployBtn.disabled = true;
+            deployBtn.innerText = "ПОДОЖДИТЕ...";
+            status.innerText = "ЗАПУСК...";
 
             const config = {
                 token: token,
-                welcome: document.getElementById('welcomeMsg').value,
+                welcome: welcome || "Привет!",
                 buttons: []
             };
 
             document.querySelectorAll('#buttonsContainer > div').forEach(div => {
-                config.buttons.push({
-                    name: div.querySelector('.btn-name').value,
-                    reply: div.querySelector('.btn-reply').value
-                });
+                const name = div.querySelector('.btn-name').value;
+                const reply = div.querySelector('.btn-reply').value;
+                if(name) config.buttons.push({ name, reply });
             });
 
             try {
-                // ВАЖНО: Замени URL ниже на адрес твоего сервера после деплоя на Render
-                const response = await fetch('https://YOUR-SERVER-URL.render.com/create_bot', {
+                // Твоя ссылка от Render
+                const response = await fetch('https://python-l1rr.onrender.com/run', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(config)
                 });
-                
-                if(response.ok) {
-                    alert("✅ Бот запущен! Напиши ему в Telegram.");
-                    document.getElementById('status').innerText = "Бот Активен";
+
+                if (response.ok) {
+                    alert("✅ УСПЕХ! Бот запущен. Проверь его в Telegram!");
+                    status.innerText = "АКТИВЕН";
+                    status.className = "text-[10px] bg-green-50 text-green-600 px-2 py-1 rounded-full font-bold uppercase";
                 } else {
-                    alert("❌ Ошибка сервера. Проверь токен.");
+                    alert("❌ Ошибка сервера. Проверь правильность токена.");
                 }
-            } catch (e) {
-                alert("Ошибка: Сервер не отвечает. Нужно настроить Backend.");
+            } catch (error) {
+                console.error(error);
+                alert("Ошибка соединения. Возможно, сервер Render еще просыпается (подождите 1 минуту).");
             } finally {
-                btn.innerText = "🚀 ЗАПУСТИТЬ БОТА";
-                btn.disabled = false;
+                deployBtn.disabled = false;
+                deployBtn.innerText = "🚀 ЗАПУСТИТЬ БОТА";
             }
         }
     </script>
