@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктор Ботов</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-5">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold mb-4">Создай своего бота</h1>
+        
+        <!-- Контейнер для блоков бота -->
+        <div id="bot-builder" class="space-y-4 mb-6">
+            <div class="bg-white p-4 rounded shadow">
+                <p class="font-semibold text-gray-700">Стартовое сообщение:</p>
+                <input type="text" placeholder="Привет! Как дела?" class="w-full border p-2 rounded mt-2">
+            </div>
+        </div>
+
+        <button onclick="addStep()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+            + Добавить шаг
+        </button>
+    </div>
+
+    <script>
+        function addStep() {
+            const container = document.getElementById('bot-builder');
+            const newStep = document.createElement('div');
+            newStep.className = 'bg-white p-4 rounded shadow border-l-4 border-blue-500';
+            newStep.innerHTML = `
+                <p class="font-semibold text-gray-700">Новый шаг:</p>
+                <input type="text" placeholder="Введите текст ответа..." class="w-full border p-2 rounded mt-2">
+            `;
+            container.appendChild(newStep);
+        }
+    </script>
+</body>
+</html>
