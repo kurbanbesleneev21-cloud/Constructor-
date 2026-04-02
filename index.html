@@ -2,276 +2,143 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель Управления | BotMaster AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BotMaster | Mobile Creator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@heroicons/heroicons@v2.0.18/24/outline/index.js" type="module"></script>
     <style>
-        /* Общие настройки для плавности */
-        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-        .anim-fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Стили для скроллбара в предпросмотре */
-        #chatWindow::-webkit-scrollbar { width: 4px; }
-        #chatWindow::-webkit-scrollbar-thumb { background-color: #4b5563; border-radius: 2px; }
-
-        /* Стиль для активного пункта меню */
-        .nav-link-active { background-color: rgba(255,255,255,0.1); border-left: 4px solid #fff; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .mobile-shadow { shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
+        /* Анимация появления меню */
+        #mobile-menu { transition: transform 0.3s ease-in-out; }
+        .hidden-menu { transform: translateX(-100%); }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex text-gray-900 overflow-hidden">
+<body class="bg-gray-50 min-h-screen overflow-x-hidden">
 
-    <aside class="w-64 bg-indigo-700 p-6 flex flex-col text-white shadow-xl z-10">
-        <div class="flex items-center gap-3 mb-10">
-            <svg class="w-8 h-8 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-            <h1 class="text-2xl font-bold tracking-tight">BotMaster <span class="text-indigo-200">AI</span></h1>
+    <div id="mobile-menu" class="fixed inset-0 z-50 bg-indigo-700 w-64 p-6 text-white hidden-menu shadow-2xl">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-xl font-bold">Меню</h2>
+            <button onclick="toggleMenu()" class="p-2 bg-indigo-600 rounded-lg">×</button>
         </div>
-
-        <nav class="space-y-3 flex-grow">
-            <a href="#" class="flex items-center gap-3 p-3 rounded-lg nav-link-active transition hover:bg-indigo-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                <span>Создать бота</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded-lg transition hover:bg-indigo-600 text-indigo-100">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                <span>Мои боты (3)</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded-lg transition hover:bg-indigo-600 text-indigo-100">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <span>Аналитика</span>
-            </a>
+        <nav class="space-y-4">
+            <a href="#" class="flex items-center gap-3 p-3 bg-white/10 rounded-xl"><span>🤖</span> Создать бота</a>
+            <a href="#" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl"><span>📂</span> Мои боты</a>
+            <a href="#" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl"><span>📊</span> Аналитика</a>
         </nav>
+    </div>
 
-        <div class="border-t border-indigo-600 pt-6 mt-6 text-sm text-indigo-200">
-            &copy; 2026 Конструктор
-        </div>
-    </aside>
+    <header class="sticky top-0 z-40 bg-white border-b p-4 flex justify-between items-center shadow-sm">
+        <button onclick="toggleMenu()" class="p-2 text-indigo-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <h1 class="text-xl font-extrabold text-indigo-700 tracking-tight">BotMaster AI</h1>
+        <div class="w-8 h-8 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center text-xs font-bold text-indigo-600">K</div>
+    </header>
 
-    <div class="flex-1 flex flex-col h-screen overflow-hidden">
+    <main class="p-4 space-y-6 pb-24">
         
-        <header class="bg-white border-b border-gray-100 p-5 flex justify-between items-center shadow-sm">
-            <div class="flex items-center gap-2">
-                <span class="text-sm text-gray-500">Проект:</span>
-                <span class="font-medium bg-gray-100 px-3 py-1 rounded-full text-sm">Новый бот</span>
-            </div>
-            <div class="flex items-center gap-4">
-                <div id="statusIndicator" class="flex items-center gap-2 text-sm text-amber-600 font-medium bg-amber-50 px-3 py-1 rounded-full">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
-                    </span>
-                    Ожидание сохранения
-                </div>
-                <div class="w-10 h-10 rounded-full bg-gray-200 border border-gray-300 flex items-center justify-center font-bold text-gray-500">K</div>
-            </div>
-        </header>
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+            <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2 text-lg">
+                <span class="text-indigo-500">🔑</span> Настройка API
+            </h3>
+            <input type="text" id="botToken" placeholder="Токен от @BotFather" class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition">
+            <p class="text-[10px] text-gray-400 mt-2 px-1 text-center">Создайте бота в Telegram через @BotFather, чтобы получить ключ.</p>
+        </section>
 
-        <main class="flex-1 overflow-y-auto p-8 bg-gray-50 grid grid-cols-1 xl:grid-cols-3 gap-8">
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+            <h3 class="font-bold text-gray-800 mb-3 text-lg">💬 Сообщение бота</h3>
+            <textarea id="welcomeMsg" rows="3" placeholder="Приветствие при старте..." class="w-full bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="updatePreview()"></textarea>
+        </section>
+
+        <section class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-gray-800 text-lg">🔘 Кнопки меню</h3>
+                <span id="btnCount" class="text-xs bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full font-bold">0/4</span>
+            </div>
             
-            <div class="xl:col-span-2 space-y-8">
-                
-                <section class="bg-white p-7 rounded-2xl shadow-sm border border-gray-100 anim-fade-in">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="p-3 rounded-lg bg-indigo-50 text-indigo-600">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                        </div>
-                        <h2 class="text-2xl font-bold tracking-tight">Настройка API токена</h2>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">API Токен бота</label>
-                            <input type="text" id="botToken" placeholder="Вставьте токен от @BotFather (например: 123456:ABC...)" class="w-full border border-gray-200 rounded-xl p-3.5 shadow-inner bg-gray-50 focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 transition">
-                            <p class="text-xs text-gray-500 mt-2 flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                Получите токен, написав команду /newbot в официальный бот @BotFather в Telegram.
-                            </p>
+            <div id="buttonsContainer" class="space-y-3"></div>
+
+            <button onclick="addButton()" class="mt-4 w-full flex items-center justify-center gap-2 bg-indigo-50 text-indigo-700 py-4 rounded-xl font-bold text-sm active:scale-95 transition">
+                + Добавить кнопку
+            </button>
+        </section>
+
+        <section class="mt-10">
+            <h3 class="text-center text-sm font-bold text-gray-400 mb-4 uppercase tracking-widest">Как это выглядит</h3>
+            <div class="bg-black rounded-[2.5rem] p-3 border-[6px] border-gray-800 shadow-xl max-w-[300px] mx-auto overflow-hidden">
+                <div class="bg-gray-900 h-[380px] rounded-[1.8rem] relative flex flex-col">
+                    <div id="chatArea" class="flex-1 p-3 overflow-y-auto space-y-3 pt-6">
+                        <div id="previewMessage" class="bg-indigo-600 text-white p-3 rounded-2xl rounded-bl-none text-[12px] shadow-sm max-w-[85%]">
+                            Привет! Напиши что-нибудь слева.
                         </div>
                     </div>
-                </section>
-
-                <section class="bg-white p-7 rounded-2xl shadow-sm border border-gray-100 anim-fade-in" style="animation-delay: 0.1s;">
-                    <div class="flex items-center gap-3 mb-6 border-b border-gray-100 pb-5">
-                        <div class="p-3 rounded-lg bg-emerald-50 text-emerald-600">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-                        </div>
-                        <h2 class="text-2xl font-bold tracking-tight">Приветственное сообщение (/start)</h2>
+                    <div class="p-2 bg-gray-800 border-t border-gray-700 min-h-[80px]">
+                        <div id="previewButtons" class="grid grid-cols-2 gap-1.5"></div>
                     </div>
-
-                    <div class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Текст, который бот отправит первым</label>
-                            <textarea id="welcomeMsg" rows="4" placeholder="Например: Привет! Я твой новый удобный бот. Выбери действие в меню ниже." class="w-full border border-gray-200 rounded-xl p-3.5 shadow-inner bg-gray-50 focus:ring-2 focus:ring-indigo-200 transition"></textarea>
-                        </div>
-
-                        <div id="buttonsSection">
-                            <div class="flex justify-between items-center mb-3">
-                                <label class="block text-sm font-semibold text-gray-700">Кнопки меню (Reply Keyboard)</label>
-                                <span class="text-xs text-indigo-600 font-medium">Кнопки внизу экрана</span>
-                            </div>
-                            
-                            <div id="buttonsContainer" class="space-y-3"></div>
-
-                            <button onclick="addButton()" class="mt-4 w-full flex items-center justify-center gap-2 border-2 border-dashed border-indigo-200 text-indigo-700 font-medium py-3 rounded-xl hover:bg-indigo-50 hover:border-indigo-300 transition duration-150">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                Добавить кнопку меню
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-                <div class="pb-10 anim-fade-in" style="animation-delay: 0.2s;">
-                    <button onclick="saveBot()" class="w-full flex items-center justify-center gap-3 bg-indigo-600 text-white py-4 rounded-2xl font-bold text-lg hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition transform hover:-translate-y-0.5">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        СОХРАНИТЬ И АКТИВИРОВАТЬ БОТА
-                    </button>
-                </div>
-
-            </div>
-
-            <div class="xl:col-span-1 anim-fade-in" style="animation-delay: 0.2s;">
-                <div class="sticky top-0 pt-2">
-                    <div class="bg-gray-900 rounded-[3rem] p-3.5 border-[10px] border-gray-800 shadow-2xl h-[680px] w-[340px] mx-auto relative overflow-hidden select-none">
-                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-28 h-6 bg-gray-800 rounded-b-xl z-20 flex items-center justify-center">
-                            <div class="w-10 h-1 h bg-gray-700 rounded-full"></div>
-                        </div>
-
-                        <div class="bg-gray-800 text-white pt-8 pb-3 px-4 text-center border-b border-gray-700 relative z-10 flex items-center justify-between">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                            <div class="font-bold text-sm">Мой Новый Бот</div>
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
-                        </div>
-
-                        <div id="chatWindow" class="p-4 space-y-4 overflow-y-auto h-[440px] bg-gray-950 relative pt-6">
-                            <div class="absolute top-1 left-1/2 transform -translate-x-1/2 text-xs text-gray-600 bg-gray-900 px-2 py-0.5 rounded">сегодня</div>
-                            <div id="previewMessage" class="bg-indigo-600 text-white p-3.5 rounded-2xl rounded-bl-none max-w-[85%] text-sm shadow-md anim-fade-in break-words">
-                                Привет! Напиши текст слева, чтобы я изменился.
-                            </div>
-                        </div>
-
-                        <div class="absolute bottom-0 left-0 right-0 bg-gray-800 p-3 pb-6 border-t border-gray-700 min-h-[100px] z-10">
-                            <div id="previewButtons" class="grid grid-cols-2 gap-2">
-                                </div>
-                            <div class="mt-3 bg-gray-700 rounded-full p-2.5 text-xs text-gray-400 flex justify-between items-center">
-                                Сообщение...
-                                <svg class="w-4 h-4 text-indigo-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="text-center text-xs text-gray-400 mt-4">Визуальный предпросмотр (не настоящий чат)</p>
                 </div>
             </div>
+        </section>
 
-        </main>
+    </main>
+
+    <div class="fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-md border-t border-gray-100 z-30">
+        <button onclick="saveBot()" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-indigo-200 active:bg-indigo-800 transition">
+            🚀 Запустить бота
+        </button>
     </div>
 
     <script>
-        let buttonCount = 0;
-        const welcomeInput = document.getElementById('welcomeMsg');
-        const previewMsg = document.getElementById('previewMessage');
+        let btnCount = 0;
+        const menu = document.getElementById('mobile-menu');
 
-        // 1. Добавление кнопки в редактор
+        function toggleMenu() {
+            menu.classList.toggle('hidden-menu');
+        }
+
         function addButton() {
-            buttonCount++;
+            if (btnCount >= 4) return alert("Максимум 4 кнопки для мобильной версии");
+            btnCount++;
+            document.getElementById('btnCount').innerText = `${btnCount}/4`;
+            
             const container = document.getElementById('buttonsContainer');
             const div = document.createElement('div');
-            // Улучшенный дизайн полей кнопки
-            div.className = "flex gap-3 items-center bg-gray-50 p-3 rounded-xl border border-gray-100 anim-fade-in";
-            div.id = `btn-group-${buttonCount}`;
+            div.className = "flex gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300";
+            div.id = `btn-group-${btnCount}`;
             div.innerHTML = `
-                <div class="p-1.5 bg-gray-200 rounded text-gray-500 text-xs font-mono">${buttonCount}</div>
-                <input type="text" placeholder="Название на кнопке" class="flex-grow p-2.5 border rounded-lg shadow-sm btn-label focus:ring-1 focus:ring-indigo-200" oninput="updatePreview()">
-                <input type="text" placeholder="Ответ бота" class="w-1/3 p-2.5 border rounded-lg shadow-sm btn-reply text-gray-600 text-sm">
-                <button onclick="removeButton(${buttonCount})" class="text-gray-400 hover:text-red-500 transition p-1" title="Удалить кнопку">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                </button>
+                <input type="text" placeholder="Имя" class="w-full p-3 border border-gray-100 rounded-xl bg-gray-50 text-sm btn-label" oninput="updatePreview()">
+                <button onclick="removeButton(${btnCount})" class="bg-red-50 text-red-500 px-4 rounded-xl font-bold">×</button>
             `;
             container.appendChild(div);
         }
 
         function removeButton(id) {
             document.getElementById(`btn-group-${id}`).remove();
-            // Обновляем нумерацию оставшихся кнопок
-            updateButtonNumbers();
+            btnCount--;
+            document.getElementById('btnCount').innerText = `${btnCount}/4`;
             updatePreview();
         }
 
-        // Вспомогательная функция для обновления цифр после удаления
-        function updateButtonNumbers() {
-            const groups = document.querySelectorAll('#buttonsContainer > div');
-            buttonCount = 0;
-            groups.forEach((group, index) => {
-                buttonCount = index + 1;
-                group.id = `btn-group-${buttonCount}`;
-                group.querySelector('.font-mono').innerText = buttonCount;
-                // Обновляем onclick у кнопки удаления
-                group.querySelector('button[onclick^="removeButton"]').setAttribute('onclick', `removeButton(${buttonCount})`);
-            });
-        }
-
-        // 2. Живое обновление телефона (Preview)
         function updatePreview() {
-            // Обновляем текст
-            previewMsg.innerText = welcomeInput.value || 'Привет! Напиши текст слева, чтобы я изменился.';
+            const txt = document.getElementById('welcomeMsg').value;
+            document.getElementById('previewMessage').innerText = txt || "Привет! Напиши что-нибудь слева.";
             
-            // Обновляем кнопки в телефоне
             const previewButtonsArea = document.getElementById('previewButtons');
             previewButtonsArea.innerHTML = '';
-            
             const labels = document.querySelectorAll('.btn-label');
-            let hasButtons = false;
-
             labels.forEach(input => {
                 if(input.value.trim()) {
-                    hasButtons = true;
                     const b = document.createElement('div');
-                    // Красивый стиль кнопки в телефоне
-                    b.className = "bg-gray-700 text-white p-2.5 rounded-lg text-center text-xs border border-gray-600 shadow font-medium break-words anim-fade-in";
-                    b.innerText = input.value.trim();
+                    b.className = "bg-gray-700 text-white py-2 rounded-lg text-center text-[10px] font-bold border border-gray-600";
+                    b.innerText = input.value;
                     previewButtonsArea.appendChild(b);
                 }
             });
         }
 
-        // Слушаем ввод текста приветствия
-        welcomeInput.addEventListener('input', updatePreview);
-
-        // 3. Функция сохранения (Сбор данных)
         function saveBot() {
-            const token = document.getElementById('botToken').value.trim();
-            const welcome = welcomeInput.value.trim();
-
-            if(!token) {
-                alert("🔴 Ошибка: Введите API Токен бота!");
-                document.getElementById('botToken').focus();
-                return;
-            }
-
-            const botData = {
-                token: token,
-                welcomeText: welcome,
-                buttons: []
-            };
-
-            const groups = document.querySelectorAll('#buttonsContainer > div');
-            groups.forEach(group => {
-                const label = group.querySelector('.btn-label').value.trim();
-                const reply = group.querySelector('.btn-reply').value.trim();
-                if(label) {
-                    botData.buttons.push({ label, reply });
-                }
-            });
-
-            console.log("✅ Данные готовы к отправке на сервер:", botData);
-            
-            // Визуальное изменение статуса
-            const status = document.getElementById('statusIndicator');
-            status.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Запущен`;
-            status.classList.remove('text-amber-600', 'bg-amber-50');
-            status.classList.add('text-emerald-700', 'bg-emerald-50');
-
-            alert("🎉 Настройки успешно сохранены в консоль браузера! Чтобы бот реально заработал в Telegram, нам нужно написать серверную часть на Python.");
+            const token = document.getElementById('botToken').value;
+            if(!token) return alert("Введите токен!");
+            alert("✅ Бот готов к сохранению!");
         }
     </script>
 </body>
